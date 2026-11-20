@@ -1,0 +1,44 @@
+@model IEnumerable<clubmanager.Models.tblUser>
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh sách tài khoản người dùng</h2>
+    </div>
+
+    <section class="section">
+        <div class="card overflow-auto">
+            <div class="card-body mt-4">
+                <table class="table table-borderless datatable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@item.UserID</td>
+                                <td>@item.UserName</td>
+                                <td>@item.Email</td>
+                                <td class="text-center">
+                                    @if (item.IsActive == true)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
