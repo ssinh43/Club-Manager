@@ -5,13 +5,21 @@ namespace clubmanager.Utilities
 {
     public class Functions
     {
-        // Lưu thông tin đăng nhập (giống TH10)
+        // Lưu thông tin đăng nhập
         public static int _UserID = 0;
         public static string _UserName = string.Empty;
         public static string _FullName = string.Empty;
         public static int _RoleID = 0;
         public static string _Message = string.Empty;
         public static string _Email = string.Empty;
+
+        // Biến đăng nhập của Admin
+        public static int _AdminID = 0;
+        public static string _AdminName = string.Empty;
+        public static string _AdminEmail = string.Empty;
+        public static string _AdminMessage = string.Empty;
+
+        public static bool IsAdminLogin() => _AdminID > 0;
 
         public static string MD5Hash(string? text)
         {
