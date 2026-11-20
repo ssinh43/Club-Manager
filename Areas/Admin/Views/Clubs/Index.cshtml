@@ -1,0 +1,21 @@
+@model clubmanager.ViewModels.ClubListVm
+@{  ViewData["Title"] = "Quản lý câu lạc bộ"; }
+<main id="main" class="main"><section class="section">
+<div class="page-heading"><div><span class="eyebrow">BẢNG ĐIỀU KHIỂN</span><h1>Quản lý câu lạc bộ <span class="wave">✦</span></h1><p>Theo dõi và tổ chức các câu lạc bộ thể thao trong trường.</p></div><a class="btn btn-primary btn-main" asp-action="Create"><i class="bi bi-plus-lg"></i> Thêm câu lạc bộ</a></div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon sky"><i class="bi bi-collection"></i></div><div><span>Tổng số câu lạc bộ</span><strong>@Model.Total</strong><small>Toàn bộ hệ thống</small></div></div>
+<div class="stat-card"><div class="stat-icon mint"><i class="bi bi-activity"></i></div><div><span>Đang hoạt động</span><strong>@Model.Active</strong><small>CLB đang mở</small></div></div>
+<div class="stat-card"><div class="stat-icon purple"><i class="bi bi-people"></i></div><div><span>Tổng thành viên</span><strong>@Model.Members</strong><small>Đã được duyệt</small></div></div>
+<div class="stat-card"><div class="stat-icon amber"><i class="bi bi-hourglass-split"></i></div><div><span>Đơn chờ duyệt</span><strong>@Model.Pending</strong><small>Cần xử lý</small></div></div>
+</div>
+<div class="panel"><div class="panel-head"><div><h2>Danh sách câu lạc bộ</h2><p>Quản lý thông tin, thành viên và đăng ký</p></div></div>
+<form method="get" class="filter-row"><div class="search-field"><i class="bi bi-search"></i><input name="search" value="@Model.Search" placeholder="Tìm tên hoặc mã CLB..." aria-label="Tìm câu lạc bộ" /></div><select name="sport" aria-label="Lọc môn thể thao"><option value="">Tất cả môn thể thao</option>@foreach(var s in Model.Sports){if(Model.Sport==s){<option value="@s" selected>@s</option>}else{<option value="@s">@s</option>}}</select><select name="status" aria-label="Lọc trạng thái"><option value="">Mọi trạng thái</option>@foreach(var s in new[]{"Hoạt động","Tạm dừng"}){if(Model.Status==s){<option selected value="@s">@s</option>}else{<option value="@s">@s</option>}}</select><button class="btn btn-primary" type="submit">Lọc</button><a class="btn btn-light border" asp-action="Index">Xóa lọc</a></form>
+<div class="table-responsive"><table class="table club-table"><thead><tr><th>CÂU LẠC BỘ</th><th>MÔN THỂ THAO</th><th>THÀNH VIÊN</th><th>TRẠNG THÁI</th><th>THAO TÁC</th></tr></thead><tbody>
+@foreach(var c in Model.Clubs){<tr><td><div class="club-name"><span class="club-letter">@c.Name.Substring(0,1).ToUpper()</span><div><strong>@c.Name</strong><small>@c.Code</small></div></div></td><td>@c.Sport</td><td><span class="inline-count"><i class="bi bi-people"></i> @c.Members.Count / @c.Capacity</span></td><td><span class="status-pill @(c.Status == "Hoạt động" ? "status-live" : "status-paused")">● @c.Status</span></td><td><div class="action-buttons"><a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-outline-primary" title="Chi tiết"><i class="bi bi-eye"></i></a><a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-sm btn-outline-secondary" title="Chỉnh sửa"><i class="bi bi-pencil"></i></a></div></td></tr>}
+@if(!Model.Clubs.Any()){<tr><td colspan="5" class="empty-state"><i class="bi bi-inbox"></i><h5>Chưa có câu lạc bộ phù hợp</h5><p>Hãy thử bộ lọc khác hoặc tạo câu lạc bộ mới.</p></td></tr>}
+</tbody></table></div>
+<div class="panel-foot">Hiển thị @Model.Clubs.Count câu lạc bộ</div>
+</div>
+
+
+</section></main>
