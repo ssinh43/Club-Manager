@@ -1,149 +1,114 @@
-using System.Text.Json;
+using clubmanager.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-namespace ClubManager.Areas.Admin.Controllers
+namespace clubmanager.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class EventController : Controller
     {
-        private const string SessionKey = "AdminEventList";
+        private readonly DataContext _context;
 
-        public class EventItemViewModel
+        public EventController(DataContext context)
         {
-            public int Id { get; set; }
-            public string EventName { get; set; } = string.Empty;
-            public DateTime? EventDate { get; set; }
-            public string? Location { get; set; }
-            public string? Description { get; set; }
+            _context = context;
         }
 
-        private List<EventItemViewModel> GetEvents()
+        // GET: /Admin/Event hoặc /Admin/Event/Index
+        public async Task<IActionResult> Index()
         {
-            var json = HttpContext.Session.GetString(SessionKey);
-            if (string.IsNullOrEmpty(json))
-            {
-                return new List<EventItemViewModel>();
-            }
-            return JsonSerializer.Deserialize<List<EventItemViewModel>>(json) ?? new List<EventItemViewModel>();
-        }
+            var events = await _context.Events
+                .OrderByDescending(e => e.Id)
+                .ToListAsync();
 
-        private void SaveEvents(List<EventItemViewModel> events)
-        {
-            var json = JsonSerializer.Serialize(events);
-            HttpContext.Session.SetString(SessionKey, json);
-        }
-
-        // Danh sách sự kiện (/Admin/Event/Index)
-        public IActionResult Index()
-        {
-            var events = GetEvents();
             return View(events);
         }
 
-        // Thêm mới sự kiện - mở form (/Admin/Event/Create)
+        // GET: /Admin/Event/Create
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(new Event
+            {
+                EventDate = DateTime.Now
+            });
         }
 
-        // Thêm mới sự kiện - xử lý lưu (/Admin/Event/Create)
+        // POST: /Admin/Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(string eventName, DateTime? eventDate, string location, string? description)
+        public async Task<IActionResult> Create(Event model)
         {
-            if (string.IsNullOrWhiteSpace(eventName))
+            if (!ModelState.IsValid)
             {
-                ViewBag.Error = "Vui lòng nhập tên sự kiện.";
-                return View();
+                return View(model);
             }
 
-            var events = GetEvents();
-            var nextId = events.Count > 0 ? events.Max(x => x.Id) + 1 : 1;
+            _context.Events.Add(model);
+            await _context.SaveChangesAsync();
 
-            events.Add(new EventItemViewModel
-            {
-                Id = nextId,
-                EventName = eventName.Trim(),
-                EventDate = eventDate,
-                Location = string.IsNullOrWhiteSpace(location) ? null : location.Trim(),
-                Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim()
-            });
-
-            SaveEvents(events);
-            TempData["Success"] = $"Đã thêm sự kiện: {eventName.Trim()}";
+            TempData["Success"] = "Thêm sự kiện thành công.";
             return RedirectToAction(nameof(Index));
         }
 
-        // Sửa sự kiện - mở form (/Admin/Event/Edit/1)
+        // GET: /Admin/Event/Edit/1
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var events = GetEvents();
-            var item = events.FirstOrDefault(x => x.Id == id);
+            var item = await _context.Events.FindAsync(id);
             if (item == null)
             {
-                TempData["Error"] = "Không tìm thấy sự kiện cần sửa.";
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
 
             return View(item);
         }
 
-        // Sửa sự kiện - xử lý cập nhật (/Admin/Event/Edit)
+        // POST: /Admin/Event/Edit/1
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, string eventName, DateTime? eventDate, string location, string? description)
+        public async Task<IActionResult> Edit(int id, Event model)
         {
-            if (string.IsNullOrWhiteSpace(eventName))
+            if (id != model.Id)
             {
-                ViewBag.Error = "Vui lòng nhập tên sự kiện.";
-                return View(new EventItemViewModel
-                {
-                    Id = id,
-                    EventName = eventName ?? string.Empty,
-                    EventDate = eventDate,
-                    Location = location,
-                    Description = description
-                });
+                return NotFound();
             }
 
-            var events = GetEvents();
-            var item = events.FirstOrDefault(x => x.Id == id);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var item = await _context.Events.FindAsync(id);
             if (item == null)
             {
-                TempData["Error"] = "Không tìm thấy sự kiện cần sửa.";
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
 
-            item.EventName = eventName.Trim();
-            item.EventDate = eventDate;
-            item.Location = string.IsNullOrWhiteSpace(location) ? null : location.Trim();
-            item.Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
+            item.EventName = model.EventName;
+            item.EventDate = model.EventDate;
+            item.Location = model.Location;
+            item.Description = model.Description;
 
-            SaveEvents(events);
-            TempData["Success"] = $"Đã cập nhật sự kiện: {item.EventName}";
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Cập nhật sự kiện thành công.";
             return RedirectToAction(nameof(Index));
         }
 
-        // Xóa sự kiện (/Admin/Event/Delete)
+        // POST: /Admin/Event/Delete/1
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var events = GetEvents();
-            var item = events.FirstOrDefault(x => x.Id == id);
-            if (item == null)
+            var item = await _context.Events.FindAsync(id);
+            if (item != null)
             {
-                TempData["Error"] = "Không tìm thấy sự kiện cần xóa.";
-                return RedirectToAction(nameof(Index));
+                _context.Events.Remove(item);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Đã xóa sự kiện.";
             }
 
-            var deletedName = item.EventName;
-            events.Remove(item);
-            SaveEvents(events);
-
-            TempData["Success"] = $"Đã xóa sự kiện: {deletedName}";
             return RedirectToAction(nameof(Index));
         }
     }
