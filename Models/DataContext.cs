@@ -13,6 +13,9 @@ namespace clubmanager.Models
         public DbSet<tblMenu> Menus { get; set; }
         public DbSet<tblUser> User { get; set; }
         public DbSet<AdminUser> AdminUsers { get; set; }
-        public DbSet<AdminMenu> AdminMenus { get; set; }    
+        public DbSet<AdminMenu> AdminMenus { get; set; }
+        public DbSet<Club> Clubs { get; set; }
+        public DbSet<ClubMember> ClubMembers { get; set; }
+        public DbSet<JoinRequest> JoinRequests { get; set; }    
     }
 }
