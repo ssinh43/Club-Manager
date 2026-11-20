@@ -1,0 +1,27 @@
+@model clubmanager.Models.tblUser
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Confirm to delete a user</h2>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="UserID">UserID</label>
+            <input type="text" class="form-control mb-3" asp-for="UserID" disabled />
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="UserName">UserName</label>
+            <input type="text" class="form-control mb-3" asp-for="UserName" disabled />
+        </div>
+    </div>
+
+    <form asp-action="UserDelete" asp-route-id="@Model.UserID" method="post">
+        <input type="hidden" asp-for="UserID" />
+        <a class="btn btn-lg btn-warning p-2 mr-5" href="javascript:history.back()">
+            <i class="bi bi-arrow-left-circle"></i> Go back
+        </a>
+        <button type="submit" class="btn btn-lg btn-danger p-2">
+            <i class="bi bi-trash"></i> Delete
+        </button>
+    </form>
+</main>
