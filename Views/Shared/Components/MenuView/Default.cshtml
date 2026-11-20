@@ -1,0 +1,46 @@
+@using clubmanager.Models
+@model IList<tblMenu>
+
+<header id="header" class="header d-flex align-items-center fixed-top">
+  <div class="container position-relative d-flex align-items-center justify-content-between">
+
+    <a href="@Url.Action("Index", "Home")" class="logo d-flex align-items-center me-auto me-xl-0">
+      <h1 class="sitename">Creativo</h1>
+    </a>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        @foreach (var menu in Model.Where(m => m.Levels == 1).OrderBy(m => m.MenuOrder))
+        {
+            var pID = menu.MenuID;
+            var sMenu = Model.Where(s => s.ParentID == pID).OrderBy(s => s.MenuOrder).ToList();
+            if (sMenu.Count == 0)
+            {
+                <li><a href="@Url.Action(menu.ActionName, menu.ControllerName)">@menu.MenuName</a></li>
+            }
+            else
+            {
+                <li class="dropdown">
+                    <a href="#"><span>@menu.MenuName</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <ul>
+                        @foreach (var smn in sMenu)
+                        {
+                            <li><a href="@Url.Action(smn.ActionName, smn.ControllerName)">@smn.MenuName</a></li>
+                        }
+                    </ul>
+                </li>
+            }
+        }
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <div class="header-social-links">
+      <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
+      <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+      <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+      <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+    </div>
+
+  </div>
+</header>
