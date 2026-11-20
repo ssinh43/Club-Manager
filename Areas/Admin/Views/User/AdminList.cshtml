@@ -5,6 +5,12 @@
         <h2>Danh sách tài khoản Admin</h2>
     </div>
 
+    <p>
+    <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="User" asp-action="AdminCreate">
+        <i class="bi bi-file-earmark-text me-1"></i>Add an account
+    </a>
+    </p>
+
     <section class="section">
         <div class="card overflow-auto">
             <div class="card-body mt-4">
@@ -15,13 +21,16 @@
                             <th>Username</th>
                             <th>Email</th>
                             <th class="text-center">Status</th>
+                            <th class="text-center">Functions</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @{ int stt = 0; }
                         @foreach (var item in Model)
                         {
+                            stt++;
                             <tr>
-                                <td class="text-center">@item.UserID</td>
+                                <td class="text-center">@stt</td>
                                 <td>@item.UserName</td>
                                 <td>@item.Email</td>
                                 <td class="text-center">
@@ -33,6 +42,15 @@
                                     {
                                         <span class="badge bg-secondary">Inactive</span>
                                     }
+                                </td>
+                                <td class="text-center">
+                                    <a asp-area="Admin" asp-controller="User" asp-action="AdminEdit"
+                                    asp-route-id="@item.UserID" class="btn btn-primary btn-sm"
+                                    title="Edit the account"><i class="bi bi-pencil"></i></a>
+
+                                    <a asp-area="Admin" asp-controller="User" asp-action="AdminDelete"
+                                    asp-route-id="@item.UserID" class="btn btn-danger btn-sm"
+                                    title="Delete the account"><i class="bi bi-trash"></i></a>
                                 </td>
                             </tr>
                         }

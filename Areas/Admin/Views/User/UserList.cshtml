@@ -5,6 +5,17 @@
         <h2>Danh sách tài khoản người dùng</h2>
     </div>
 
+    <p>
+        <a type="button" class="btn btn-success" asp-area="Admin" asp-controller="User" asp-action="UserCreate">
+            <i class="bi bi-file-earmark-text me-1"></i>Add a user
+        </a>
+    </p>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
     <section class="section">
         <div class="card overflow-auto">
             <div class="card-body mt-4">
@@ -15,13 +26,16 @@
                             <th>Username</th>
                             <th>Email</th>
                             <th class="text-center">Status</th>
+                            <th class="text-center">Functions</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @{ int stt = 0; }
                         @foreach (var item in Model)
                         {
+                            stt++;
                             <tr>
-                                <td class="text-center">@item.UserID</td>
+                                <td class="text-center">@stt</td>
                                 <td>@item.UserName</td>
                                 <td>@item.Email</td>
                                 <td class="text-center">
@@ -33,6 +47,15 @@
                                     {
                                         <span class="badge bg-secondary">Inactive</span>
                                     }
+                                </td>
+                                <td class="text-center">
+                                    <a asp-area="Admin" asp-controller="User" asp-action="UserEdit"
+                                       asp-route-id="@item.UserID" class="btn btn-primary btn-sm"
+                                       title="Edit the user"><i class="bi bi-pencil"></i></a>
+
+                                    <a asp-area="Admin" asp-controller="User" asp-action="UserDelete"
+                                       asp-route-id="@item.UserID" class="btn btn-danger btn-sm"
+                                       title="Delete the user"><i class="bi bi-trash"></i></a>
                                 </td>
                             </tr>
                         }
