@@ -8,9 +8,7 @@ namespace clubmanager.Areas.Admin.Controllers
     {
         public IActionResult Index()
         {
-            if (!Functions.IsAdminLogin())
-                return RedirectToAction("Index", "Login", new { area = "Admin" });
-
+            if (!Functions.IsAdminLogin()) return RedirectToAction("Index", "Login");
             return View();
         }
 
@@ -20,8 +18,7 @@ namespace clubmanager.Areas.Admin.Controllers
             Functions._AdminName = string.Empty;
             Functions._AdminEmail = string.Empty;
             Functions._AdminMessage = string.Empty;
-
-            return RedirectToAction("Index", "Login", new { area = "Admin" });
+            return RedirectToAction("Index", "Login");
         }
     }
 }
