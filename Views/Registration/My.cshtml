@@ -1,0 +1,169 @@
+@model List<clubmanager.Models.RegistrationViewModel>
+
+@{
+    Layout = "_LayoutNice";
+    ViewData["Title"] = "Đăng ký sự kiện của tôi";
+}
+
+<div class="pagetitle">
+    <h1>Đăng ký sự kiện của tôi</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+            </li>
+            <li class="breadcrumb-item active">
+                Đăng ký sự kiện
+            </li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Danh sách sự kiện đã đăng ký
+                    </h5>
+
+                    @* Thông báo *@
+                    @if (TempData["Message"] != null)
+                    {
+                        <div class="alert alert-info alert-dismissible fade show"
+                             role="alert">
+                            @TempData["Message"]
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close">
+                            </button>
+                        </div>
+                    }
+
+                    @if (Model == null || Model.Count == 0)
+                    {
+                        <div class="alert alert-warning">
+                            Bạn chưa đăng ký sự kiện nào.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover align-middle">
+
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên sự kiện</th>
+                                        <th>Ngày diễn ra</th>
+                                        <th>Địa điểm</th>
+                                        <th>Ngày đăng ký</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @{
+                                        int stt = 1;
+                                    }
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@stt</td>
+
+                                            <td>
+                                                <strong>@item.EventName</strong>
+                                            </td>
+
+                                            <td>
+                                                @item.StartDate.ToString("dd/MM/yyyy HH:mm")
+                                            </td>
+
+                                            <td>
+                                                @item.Location
+                                            </td>
+
+                                            <td>
+                                                @item.RegistrationDate.ToString("dd/MM/yyyy HH:mm")
+                                            </td>
+
+                                            <td>
+                                                @if (item.Status == "Đã đăng ký")
+                                                {
+                                                    <span class="badge bg-success">
+                                                        Đã đăng ký
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">
+                                                        Đã hủy
+                                                    </span>
+                                                }
+                                            </td>
+
+                                            <td>
+                                                @if (item.Status == "Đã đăng ký"
+                                                     && item.StartDate > DateTime.Now)
+                                                {
+                                                    <form asp-controller="Registration"
+                                                          asp-action="Cancel"
+                                                          method="post"
+                                                          onsubmit="return confirm('Bạn có chắc chắn muốn hủy đăng ký sự kiện này không?');">
+
+                                                        @Html.AntiForgeryToken()
+
+                                                        <input type="hidden"
+                                                               name="id"
+                                                               value="@item.RegistrationID" />
+
+                                                        <button type="submit"
+                                                                class="btn btn-danger btn-sm">
+                                                            <i class="bi bi-x-circle"></i>
+                                                            Hủy đăng ký
+                                                        </button>
+                                                    </form>
+                                                }
+                                                else if (item.Status == "Đã đăng ký")
+                                                {
+                                                    <span class="text-muted">
+                                                        Sự kiện đã bắt đầu
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">
+                                                        Đã hủy
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                        stt++;
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                    }
+
+                    <a asp-controller="Event"
+                       asp-action="Index"
+                       class="btn btn-primary mt-3">
+                        <i class="bi bi-calendar-event"></i>
+                        Xem sự kiện
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
