@@ -1,0 +1,18 @@
+@model clubmanager.Models.Club
+@{  bool edit = Model.Id > 0; ViewData["Title"] = edit ? "Chỉnh sửa câu lạc bộ" : "Thêm câu lạc bộ"; }
+<main id="main" class="main"><section class="section">
+<div class="page-heading"><div><a class="back-link" asp-action="Index"><i class="bi bi-arrow-left"></i> Quay lại danh sách</a><h1>@ViewData["Title"]</h1><p>Điền thông tin câu lạc bộ thể thao của trường.</p></div></div>
+<form asp-action="@(edit ? "Edit" : "Create")" asp-route-id="@Model.Id" method="post" class="panel form-panel">
+<input type="hidden" asp-for="Id" /><div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<h2><i class="bi bi-info-circle"></i> Thông tin cơ bản</h2>
+<div class="row g-4"><div class="col-md-4"><label asp-for="Code" class="form-label"></label><input asp-for="Code" class="form-control" placeholder="VD: CLB-BD"/><span asp-validation-for="Code" class="text-danger small"></span></div><div class="col-md-8"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" placeholder="VD: Câu lạc bộ Bóng đá"/><span asp-validation-for="Name" class="text-danger small"></span></div>
+<div class="col-md-6"><label asp-for="Sport" class="form-label"></label><input asp-for="Sport" class="form-control" placeholder="VD: Bóng đá, Cầu lông..."/><span asp-validation-for="Sport" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="Capacity" class="form-label"></label><input asp-for="Capacity" type="number" class="form-control" min="1"/><span asp-validation-for="Capacity" class="text-danger small"></span></div>
+<div class="col-md-6"><label asp-for="Location" class="form-label"></label><input asp-for="Location" class="form-control" placeholder="Nhà thi đấu, sân trường..."/><span asp-validation-for="Location" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="Schedule" class="form-label"></label><input asp-for="Schedule" class="form-control" placeholder="VD: Thứ 3, 5 - 16:30"/><span asp-validation-for="Schedule" class="text-danger small"></span></div>
+<div class="col-md-6"><label asp-for="FoundedOn" class="form-label"></label><input asp-for="FoundedOn" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control"/><span asp-validation-for="FoundedOn" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="Status" class="form-label"></label><select asp-for="Status" class="form-select"><option>Hoạt động</option><option>Tạm dừng</option></select><span asp-validation-for="Status" class="text-danger small"></span></div>
+<div class="col-12"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control" rows="4" placeholder="Giới thiệu, mục tiêu, hoạt động nổi bật..."></textarea><span asp-validation-for="Description" class="text-danger small"></span></div></div>
+<div class="form-actions"><a class="btn btn-light border" asp-action="Index">Hủy</a><button type="submit" class="btn btn-primary btn-main"><i class="bi bi-check2-circle"></i> @(edit ? "Lưu thay đổi" : "Tạo câu lạc bộ")</button></div>
+</form>
+
+
+
+</section></main>

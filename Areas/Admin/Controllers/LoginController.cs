@@ -51,6 +51,7 @@ namespace aznews.Areas.Admin.Controllers
             }
 
             Functions._AdminMessage = string.Empty;
+            HttpContext.Session.SetInt32("ClubAdminId", check.UserID);
             Functions._AdminID = check.UserID;
             Functions._AdminName = string.IsNullOrEmpty(check.UserName) ? string.Empty : check.UserName;
             Functions._AdminEmail = string.IsNullOrEmpty(check.Email) ? string.Empty : check.Email;
