@@ -14,7 +14,7 @@ namespace clubmanager.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: /Admin/Event hoặc /Admin/Event/Index
+        
         public async Task<IActionResult> Index()
         {
             var events = await _context.Events
