@@ -8,7 +8,7 @@ namespace clubmanager.Areas.Admin.Controllers
     {
         public IActionResult Index()
         {
-            if (!Functions.IsAdminLogin())
+            if (HttpContext.Session.GetInt32("ClubAdminId") == null)
                 return RedirectToAction("Index", "Login", new { area = "Admin" });
 
             return View();
@@ -16,6 +16,7 @@ namespace clubmanager.Areas.Admin.Controllers
 
         public IActionResult Logout()
         {
+            HttpContext.Session.Remove("ClubAdminId");
             Functions._AdminID = 0;
             Functions._AdminName = string.Empty;
             Functions._AdminEmail = string.Empty;

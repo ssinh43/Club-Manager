@@ -1,0 +1,13 @@
+@model clubmanager.Models.ClubMember
+@{  bool edit=Model.Id>0; ViewData["Title"]=edit?"Chỉnh sửa thành viên":"Thêm thành viên"; }
+<main id="main" class="main"><section class="section">
+<div class="page-heading"><div><a asp-controller="Clubs" asp-action="Details" asp-route-id="@Model.ClubId" class="back-link"><i class="bi bi-arrow-left"></i> Trở lại CLB</a><h1>@ViewData["Title"]</h1><p>@ViewBag.Club?.Name</p></div></div>
+<form asp-action="@(edit?"Edit":"Create")" asp-route-id="@Model.Id" method="post" class="panel form-panel">
+<input type="hidden" asp-for="Id"/><input type="hidden" asp-for="ClubId"/><div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div><h2><i class="bi bi-person-badge"></i> Thông tin thành viên</h2>
+<div class="row g-4"><div class="col-md-6"><label asp-for="StudentCode" class="form-label"></label><input asp-for="StudentCode" class="form-control"/><span asp-validation-for="StudentCode" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="FullName" class="form-label"></label><input asp-for="FullName" class="form-control"/><span asp-validation-for="FullName" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="ClassName" class="form-label"></label><input asp-for="ClassName" class="form-control"/><span asp-validation-for="ClassName" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control"/><span asp-validation-for="Email" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="Phone" class="form-label"></label><input asp-for="Phone" class="form-control"/><span asp-validation-for="Phone" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="Role" class="form-label"></label><select asp-for="Role" class="form-select"><option>Thành viên</option><option>Phó chủ nhiệm</option><option>Chủ nhiệm</option></select><span asp-validation-for="Role" class="text-danger small"></span></div><div class="col-md-6"><label asp-for="JoinedOn" class="form-label"></label><input asp-for="JoinedOn" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control"/><span asp-validation-for="JoinedOn" class="text-danger small"></span></div></div>
+<div class="form-actions"><a asp-controller="Clubs" asp-action="Details" asp-route-id="@Model.ClubId" class="btn btn-light border">Hủy</a><button class="btn btn-primary btn-main" type="submit"><i class="bi bi-check2-circle"></i> Lưu thành viên</button></div>
+</form>
+
+
+
+</section></main>
