@@ -29,19 +29,19 @@
   <link href="~/admin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-<link href="~/admin/assets/css/style.css"
-      rel="stylesheet"
-      asp-append-version="true" />
+  <link href="~/admin/assets/css/style.css"
+        rel="stylesheet"
+        asp-append-version="true" />
 
-<!-- CSS riêng cho Quan ly cau lac bo -->
-<link href="~/css/club-integration.css"
-      rel="stylesheet"
-      asp-append-version="true" />
+  <!-- CSS riêng cho Quan ly cau lac bo -->
+  <link href="~/css/club-integration.css"
+        rel="stylesheet"
+        asp-append-version="true" />
   <!-- =======================================================
-  * Template Name: NiceAdmin - v2.4.1
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
+  - Template Name: NiceAdmin - v2.4.1
+  - Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  - Author: BootstrapMade.com
+  - License: https://bootstrapmade.com/license/
   ======================================================== -->
 </head>
 
@@ -277,10 +277,9 @@
   </header><!-- End Header -->
 
   <!-- ======= Sidebar ======= -->
-@await Component.InvokeAsync("AdminMenu")
+  @await Component.InvokeAsync("AdminMenu")
 
-
- @RenderBody()
+  @RenderBody()
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
@@ -310,6 +309,8 @@
 
   <!-- Template Main JS File -->
   <script src="~/admin/assets/js/main.js"></script>
+
+  @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 

@@ -1,0 +1,74 @@
+@model clubmanager.Models.Event
+
+@{
+    ViewData["Title"] = "Thêm sự kiện";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main" style="padding-top: 76px;">
+    <div class="pagetitle">
+        <h1>Thêm sự kiện</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Event" asp-action="Index">Sự kiện</a></li>
+                <li class="breadcrumb-item active">Thêm mới</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <h5 class="card-title">Thông tin sự kiện mới</h5>
+
+                        <form asp-area="Admin" asp-controller="Event" asp-action="Create" method="post">
+                            @Html.AntiForgeryToken()
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                            <div class="mb-3">
+                                <label asp-for="EventName" class="form-label">Tên sự kiện <span class="text-danger">*</span></label>
+                                <input asp-for="EventName" class="form-control" placeholder="Nhập tên sự kiện" />
+                                <span asp-validation-for="EventName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="EventDate" class="form-label">Thời gian diễn ra </label>
+                                <input asp-for="EventDate" type="datetime-local" class="form-control"
+                                       value="@(Model?.EventDate?.ToString("yyyy-MM-ddTHH:mm"))" />
+                                <span asp-validation-for="EventDate" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Location" class="form-label">Địa điểm</label>
+                                <input asp-for="Location" class="form-control" placeholder="Ví dụ: Hội trường A" />
+                                <span asp-validation-for="Location" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Description" class="form-label">Mô tả</label>
+                                <textarea asp-for="Description" rows="4" class="form-control" placeholder="Mô tả chi tiết sự kiện..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save me-1"></i> Lưu sự kiện
+                                </button>
+                                <a asp-area="Admin" asp-controller="Event" asp-action="Index" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i> Quay lại
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
