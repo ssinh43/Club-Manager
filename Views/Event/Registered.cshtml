@@ -1,0 +1,97 @@
+@model IEnumerable<clubmanager.Models.Event>
+
+@{
+    ViewData["Title"] = "Sự kiện đã tham gia";
+    var registeredAt = (ViewBag.RegisteredAt as Dictionary<int, DateTime>) ?? new Dictionary<int, DateTime>();
+    var now = DateTime.Now;
+    int stt = 0;
+}
+
+<style>
+    .ev-page { background: #f6f9ff; padding: 130px 0 70px; min-height: 70vh; }
+    .ev-title { font-size: 2rem; font-weight: 700; color: #012970; margin-bottom: 24px; }
+
+    .ev-card { background: #fff; border-radius: 6px; padding: 25px; box-shadow: 0 0 30px rgba(1, 41, 112, .08); }
+    .ev-card h5 { font-family: "Poppins", sans-serif; font-size: 1.2rem; font-weight: 500; color: #012970; margin: 0 0 24px; }
+
+    .ev-table { width: 100%; border-collapse: collapse; }
+    .ev-table thead th { background: #f6f7f9; font-weight: 700; color: #000; padding: 14px 10px; border-bottom: 1px solid #dee2e6; text-align: left; }
+    .ev-table tbody td { padding: 16px 10px; border-bottom: 1px solid #dee2e6; vertical-align: middle; color: #333; }
+    .ev-table tbody tr:hover { background: #ebebeb; }
+    .ev-table .name { font-weight: 600; }
+
+    .ev-status { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; color: #fff; font-weight: 500; font-size: .9rem; }
+    .ev-status.upcoming { background: #198754; }
+    .ev-status.ended { background: #6c757d; }
+</style>
+
+<div class="ev-page">
+    <div class="container">
+
+        <h1 class="ev-title">Sự kiện đã tham gia</h1>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+
+        <div class="ev-card">
+            <h5>Danh sách sự kiện bạn đã đăng ký</h5>
+
+            <div class="table-responsive">
+                <table class="ev-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60px">#</th>
+                            <th>Tên sự kiện</th>
+                            <th>Thời gian</th>
+                            <th>Địa điểm</th>
+                            <th>Mô tả</th>
+                            <th>Ngày đăng ký</th>
+                            <th style="text-align:center">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            stt++;
+                            var isPast = item.EventDate.HasValue && item.EventDate.Value < now;
+
+                            <tr>
+                                <td>@stt</td>
+                                <td class="name">@item.EventName</td>
+                                <td>@(item.EventDate.HasValue ? item.EventDate.Value.ToString("dd/MM/yyyy HH:mm") : "—")</td>
+                                <td>@(string.IsNullOrWhiteSpace(item.Location) ? "—" : item.Location)</td>
+                                <td>@(string.IsNullOrWhiteSpace(item.Description) ? "—" : item.Description)</td>
+                                <td>@(registeredAt.TryGetValue(item.Id, out var at) ? at.ToString("dd/MM/yyyy HH:mm") : "—")</td>
+                                <td style="text-align:center">
+                                    @if (isPast)
+                                    {
+                                        <span class="ev-status ended"><i class="bi bi-x-circle"></i> Đã kết thúc</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ev-status upcoming"><i class="bi bi-check-circle"></i> Sắp diễn ra</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    Bạn chưa đăng ký sự kiện nào.
+                                    <a asp-action="Index">Xem tất cả sự kiện</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
