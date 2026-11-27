@@ -1,0 +1,62 @@
+@model List<clubmanager.Models.ClubMember>
+@{
+    ViewData["Title"] = "CLB đã tham gia";
+}
+
+<section class="section">
+    <div class="container">
+        <div class="page-heading">
+            <div>
+                <span class="eyebrow">TÀI KHOẢN CỦA BẠN</span>
+                <h1>CLB đã tham gia</h1>
+                <p>Các câu lạc bộ đã xác nhận tư cách thành viên bằng email tài khoản của bạn.</p>
+            </div>
+            <a asp-action="Index" class="btn btn-outline-success">
+                <i class="bi bi-search me-1"></i> Khám phá CLB
+            </a>
+        </div>
+
+        @if (Model.Count == 0)
+        {
+            <div class="panel empty-state">
+                <i class="bi bi-people text-success fs-1"></i>
+                <h2 class="mt-3">Bạn chưa tham gia câu lạc bộ nào</h2>
+                <p class="mb-3">Gửi đăng ký tham gia một CLB để xem thông tin tại đây sau khi được duyệt.</p>
+                <a asp-action="Index" class="btn btn-success">Xem danh sách CLB</a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var member in Model)
+                {
+                    <div class="col-md-6 col-xl-4">
+                        <article class="panel h-100 mb-0">
+                            <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                                <span class="club-letter">@member.Club!.Name[..1]</span>
+                                <span class="status-pill status-live">Đã tham gia</span>
+                            </div>
+                            <p class="eyebrow mb-1">@member.Club.Sport</p>
+                            <h2>@member.Club.Name</h2>
+                            <p class="text-muted">
+                                @(string.IsNullOrWhiteSpace(member.Club.Description) ? "Thông tin hoạt động của câu lạc bộ." : member.Club.Description)
+                            </p>
+                            <div class="small text-muted">
+                                <div><i class="bi bi-person-badge me-2"></i>Vai trò: @member.Role</div>
+                                <div class="mt-2"><i class="bi bi-calendar-check me-2"></i>Tham gia ngày @member.JoinedOn.ToString("dd/MM/yyyy")</div>
+                                @if (!string.IsNullOrWhiteSpace(member.Club.Schedule))
+                                {
+                                    <div class="mt-2"><i class="bi bi-calendar-week me-2"></i>@member.Club.Schedule</div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(member.Club.Location))
+                                {
+                                    <div class="mt-2"><i class="bi bi-geo-alt me-2"></i>@member.Club.Location</div>
+                                }
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
